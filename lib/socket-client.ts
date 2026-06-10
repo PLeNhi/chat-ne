@@ -3,48 +3,27 @@ import io, { Socket } from "socket.io-client";
 
 type SocketIoClientConfig = {
   url: string;
-  token: string;
 };
 
 export default class SocketIoClient extends EventEmitter {
-    private socket: Socket | null;
+  private socket: Socket | null;
   private config: SocketIoClientConfig;
 
   constructor(config: SocketIoClientConfig) {
     super();
     this.config = config;
-     this.socket = null;
+    this.socket = null;
     this.connect();
   }
 
   private connect() {
     this.socket = io(this.config.url, {
-      auth: {
-        token: this.config.token,
-      },
-      reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5,
+      autoConnect: false
     });
-
 
     this.socket.on("connect", () => {
       console.log("WebSocket connection established");
-      // Optionally, send the token for authentication
-      if (this.config.token) {
-        this.socket?.emit("auth", { token: this.config.token });
-      }
-    });
-
-    this.socket.on("message", (event) => {
-      console.log("Received message:", event);
-        this.emit("message", event);
-    });
-
-    this.socket.on("disconnect", () => {
-      console.log("WebSocket connection closed");
-      this.emit("disconnect");
+      this.socket?.emit("join", "Hello from client!");
     });
 
     this.socket.on("error", (error) => {
@@ -67,7 +46,23 @@ export default class SocketIoClient extends EventEmitter {
 
   public disconnect() {
     if (this.socket) {
+      this.emit("disconnect", "WebSocket disconnected");
       this.socket.close();
     }
   }
 }
+
+
+    // this.socket.on("message", (event) => {
+    //   if(this.socket?.connected) {
+    //   console.log("Received message:", event);
+    //     this.emit("message", event);
+    //   } else {
+    //     console.warn("Received message but WebSocket is not connected");
+    //   }
+    // });
+
+    // this.socket.on("disconnect", () => {
+    //   console.log("WebSocket connection closed");
+    //   this.emit("disconnect", "WebSocket disconnected");
+    // });

@@ -4,24 +4,22 @@ import React, { createContext, useRef, useState } from "react";
 import SocketIoClient from "../lib/socket-client";
 
 interface SocketIoContextValue {
-  socketIoClient: SocketIoClient | null;
+  socketClient: SocketIoClient | null;
   connected: boolean;
 }
 export const socketIoContext = createContext<SocketIoContextValue>({
-  socketIoClient: null,
+  socketClient: null,
   connected: false,
 });
 
-interface Props {
-  children: React.ReactNode;
-}
 
-export function ProvideSocketIoClient({ children }: Props) {
+export function ProvideSocketIoClient({ children }: { children: React.ReactNode}) {
   const socketIo = useProvideSocketIoClient();
+  
   return (
     <socketIoContext.Provider
       value={{
-        socketIoClient: socketIo?.client || null,
+        socketClient: socketIo?.client || null,
         connected: socketIo?.connected || false,
       }}
     >

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ProvideSocketIoClient } from '../providers/socketIo-client';
+import { ProvideSocketIoClient } from '../providers/socket-client';
 
 import './globals.css';
 

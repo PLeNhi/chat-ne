@@ -8,7 +8,6 @@ export default function Home() {
           <p className="text-sm uppercase tracking-[0.3em] text-muted">chat-ne</p>
           <h1 className="mt-2 text-3xl font-semibold text-white">Realtime chat</h1>
         </header>
-
         <ChatLayout />
       </div>
     </main>
